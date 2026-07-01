@@ -1,0 +1,172 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Каталог заказов | Транспортная Компания{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'orders/css/catalog_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="catalog-wrapper">
+    <section class="catalog-section">
+        <div class="catalog-container">
+
+            <div class="catalog-header-flex">
+                <div>
+                    <h1>Каталог заказов</h1>
+                    <p class="catalog-header-sub">Доступные логистические заказы в системе управления транспортом</p>
+                </div>
+
+                {% if request.user.is_authenticated and request.user.role != 'driver' %}
+                <a href="{% url 'orders:order_create' %}" class="btn-add-order-top">
+                    + Добавить заказ
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="filter-panel">
+                <form method="GET" action="{% url 'main:catalog' %}" class="filter-form">
+
+                    <div class="filter-group wide">
+                        <label class="filter-label">Город назначения (Куда):</label>
+                        <input type="text" name="search_city" value="{{ filters.search_city }}" placeholder="Например, Москва" class="filter-input">
+                    </div>
+
+                    <div class="filter-group date-width">
+                        <label class="filter-label">Дата:</label>
+                        <input type="date" name="date" value="{{ filters.date }}" class="filter-input">
+                    </div>
+
+                    <div class="filter-group status-width">
+                        <label class="filter-label">Статус:</label>
+                        <select name="status" class="filter-select">
+                            <option value="">Все статусы</option>
+                            <option value="created" {% if filters.status == 'created' %}selected{% endif %}>Создан</option>
+                            <option value="in_progress" {% if filters.status == 'in_progress' %}selected{% endif %}>В пути</option>
+                            <option value="completed" {% if filters.status == 'completed' %}selected{% endif %}>Выполнен</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group weight-width">
+                        <label class="filter-label">Вес груза:</label>
+                        <select name="weight_range" class="filter-select">
+                            <option value="">Любой вес</option>
+                            <option value="light" {% if filters.weight_range == 'light' %}selected{% endif %}>Малотоннажный (до 3.5 т)</option>
+                            <option value="medium" {% if filters.weight_range == 'medium' %}selected{% endif %}>Средний (3.5 - 10 т)</option>
+                            <option value="heavy" {% if filters.weight_range == 'heavy' %}selected{% endif %}>Крупнотоннажный (от 10 т)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn-filter-submit">Применить</button>
+                        {% if filters.search_city or filters.status or filters.date or filters.weight_range %}
+                        <a href="{% url 'main:catalog' %}" class="btn-filter-reset">Сбросить</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+
+            <div class="orders-grid">
+                {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-route">
+                        <span class="route-label">Маршрут транспортировки</span>
+                        <div class="route-address">
+                            <div><strong>А:</strong> {{ order.loading_address }}</div>
+                            <div class="route-arrow">↓</div>
+                            <div><strong>Б:</strong> {{ order.unloading_address }}</div>
+                        </div>
+
+                        <div class="route-meta">
+                            <span class="route-distance">
+                                {% if order.route and order.route.distance_km %}
+                                    {{ order.route.distance_km }} км
+                                {% else %}
+                                    Расчет...
+                                {% endif %}
+                            </span>
+                            <span class="status-badge status-{{ order.status }}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="order-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Заказчик</span>
+                            <span class="spec-value">{{ order.client.first_name|default:order.client.username }}</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Вес груза</span>
+                            <span class="spec-value">
+                                {% if order.weight %}
+                                    {{ order.weight }} т
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-price-block">
+                            <span class="price-label">Стоимость</span>
+                            <span class="price-value">
+                                {% if order.total_price %}
+                                    {{ order.total_price }} ₽
+                                {% else %}
+                                    Расчет...
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        {% if is_driver %}
+                        <a href="#" class="btn-order-details">Принять заказ</a>
+                        {% else %}
+                        <a href="{% url 'orders:order_detail' order.id %}" class="btn-order-details" style="background-color: #718096;">Подробнее</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div style="grid-column: 1 / -1; width: 100%; display: flex; justify-content: center; padding: 60px 0;">
+                    <div class="empty-catalog-card">
+                        <h3 style="color: #2d3748; margin-top: 0; margin-bottom: 12px; font-size: 1.3rem; font-weight: 700;">Заказы не найдены</h3>
+                        <p style="color: #718096; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0;">Попробуйте изменить параметры фильтрации или сбросить поиск.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if orders.has_other_pages %}
+            <div class="pagination-container">
+
+                {% if orders.has_previous %}
+                    <a href="?page={{ orders.previous_page_number }}&search_city={{ filters.search_city }}&date={{ filters.date }}&status={{ filters.status }}&weight_range={{ filters.weight_range }}" class="pagination-link">
+                        &larr; Назад
+                    </a>
+                {% endif %}
+
+                {% for num in orders.paginator.page_range %}
+                    {% if orders.number == num %}
+                        <span class="pagination-link active">{{ num }}</span>
+                    {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+                        <a href="?page={{ num }}&search_city={{ filters.search_city }}&date={{ filters.date }}&status={{ filters.status }}&weight_range={{ filters.weight_range }}" class="pagination-link">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if orders.has_next %}
+                    <a href="?page={{ orders.next_page_number }}&search_city={{ filters.search_city }}&date={{ filters.date }}&status={{ filters.status }}&weight_range={{ filters.weight_range }}" class="pagination-link">
+                        Вперед &rarr;
+                    </a>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+</div>
+{% endblock %}

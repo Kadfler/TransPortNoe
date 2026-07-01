@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Транспортная Компания | Главная</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+{% include 'includes/header.html' %}
+
+<section class="hero">
+    <h1>Цифровая экосистема грузоперевозок</h1>
+
+    <div class="stats-container">
+        <div class="stat-item"><h2>{{ users_count }}</h2>
+            <p>Пользователей</p></div>
+        <div class="stat-item"><h2>{{ drivers_count }}</h2>
+            <p>Активных водителей</p></div>
+        <div class="stat-item"><h2>{{ vehicles_count }}</h2>
+            <p>Машин в парке</p></div>
+        <div class="stat-item"><h2>{{ total_orders_count }}</h2>
+            <p>Всего заказов</p></div>
+        <div class="stat-item"><h2>{{ completed_orders_count }}</h2>
+            <p>Выполненных рейсов</p></div>
+    </div>
+
+    <section class="cards-section">
+        <div class="info-card card-light-blue">
+            <div class="card-text-block">
+                <h3>Найдите перевозчиков</h3>
+                <p>Автоматический поиск транспорта и торги по вашему грузу.</p>
+                <a href="#" class="card-subtext">Экономьте время и оптимизируйте бюджет.</a>
+            </div>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'orders:order_create' %}" class="btn-action btn-blue-add" style="text-decoration: none;">
+                    <span class="plus-icon">+</span> Добавить груз
+                </a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="btn-action btn-blue-add" style="text-decoration: none;">
+                    Войти и добавить
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="info-card card-light-green">
+            <div class="card-text-block">
+                <h3>Найдите загрузку</h3>
+                <p>Автоматический поиск грузов для вашего транспорта.</p>
+                <a href="#" class="card-subtext subtext-green">Сократите порожние пробеги и найдите новых заказчиков.</a>
+            </div>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'vehicles:vehicle_create' %}" class="btn-action btn-blue-add" style="text-decoration: none;">
+                    <span class="plus-icon">+</span> Добавить транспорт
+                </a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="btn-action btn-blue-add" style="text-decoration: none;">
+                    Войти и добавить
+                </a>
+            {% endif %}
+        </div>
+    </section>
+        </div>
+    </section>
+
+    <section class="trades-info-section">
+        <div class="trades-container">
+            <div class="trades-header">
+                <div>
+                    <h2>Почему выбирают нашу компанию</h2>
+                    <p>Создаем лучшие условия для долгосрочного и надежного сотрудничества</p>
+                </div>
+
+                <div class="compact-switcher">
+                    <button class="switch-btn active" id="main-btn-customer">Я • Заказчик</button>
+                    <button class="switch-btn" id="main-btn-carrier">Я • Водитель</button>
+                </div>
+            </div>
+
+            <div class="trades-body">
+                <div id="main-content-customer" class="compact-grid active-content">
+                    <div class="compact-card">
+                        <div class="card-marker marker-blue"></div>
+                        <div class="card-info">
+                            <h4>Быстрая доставка <span class="badge-text-blue">Точно в срок</span></h4>
+                            <p>Оптимальные маршруты и слаженная логистика позволяют доставлять ваши грузы без
+                                задержек.</p>
+                        </div>
+                    </div>
+                    <div class="compact-card">
+                        <div class="card-marker marker-green"></div>
+                        <div class="card-info">
+                            <h4>Гарантия качества <span class="badge-text-green">Безопасность</span></h4>
+                            <p>Бережное отношение к каждому грузу. Мониторинг состояния и полная материальная
+                                ответственность.</p>
+                        </div>
+                    </div>
+                    <div class="compact-card">
+                        <div class="card-marker marker-purple"></div>
+                        <div class="card-info">
+                            <h4>Прозрачные цены <span class="badge-text-purple">Выгода</span></h4>
+                            <p>Никаких скрытых комиссий и неожиданных переплат. Честный расчет стоимости сразу при
+                                оформлении.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="main-content-carrier" class="compact-grid">
+                    <div class="compact-card">
+                        <div class="card-marker marker-blue"></div>
+                        <div class="card-info">
+                            <h4>Постоянные заказы <span class="badge-text-blue">Стабильность</span></h4>
+                            <p>Большой объем грузов по всем направлениям. Обеспечим вас работой без простоев круглый
+                                год.</p>
+                        </div>
+                    </div>
+                    <div class="compact-card">
+                        <div class="card-marker marker-green"></div>
+                        <div class="card-info">
+                            <h4>Честная оплата <span class="badge-text-green">Быстрые выплаты</span></h4>
+                            <p>Выплачиваем деньги вовремя и без задержек сразу после успешного выполнения рейса и сдачи
+                                документов.</p>
+                        </div>
+                    </div>
+                    <div class="compact-card">
+                        <div class="card-marker marker-purple"></div>
+                        <div class="card-info">
+                            <h4>Удобный график <span class="badge-text-purple">Свобода</span></h4>
+                            <p>Вы сами выбираете подходящие рейсы, направления и планируете свое рабочее время как вам
+                                удобно.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="geo-banner-section">
+        <div class="geo-banner-card">
+            <div class="geo-banner-content">
+                <span class="geo-banner-badge">Масштаб сети</span>
+                <h2>Доставка по всей России</h2>
+                <p>Охватываем ключевые промышленные центры, регионы и города. Обеспечиваем надёжную транспортную цепочку
+                    от Калининграда до Владивостока.</p>
+
+                <div class="geo-banner-features">
+                    <div class="geo-feature-item">
+                        <span class="feature-icon">✦</span>
+                        <span>500+ регулярных направлений</span>
+                    </div>
+                    <div class="geo-feature-item">
+                        <span class="feature-icon">✦</span>
+                        <span>Быстрая подача в любой точке РФ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="geo-banner-visual">
+                <div class="flag-widget-container">
+                    <div class="floating-orbit orbit-1"></div>
+                    <div class="floating-orbit orbit-2"></div>
+                    <div class="mini-geo-tag tag-1">📍 МСК</div>
+                    <div class="mini-geo-tag tag-2">📍 СПБ</div>
+                    <div class="mini-geo-tag tag-3">📍 ВЛВ</div>
+
+                    <div class="glossy-round-flag">
+                        <div class="stripe white"></div>
+                        <div class="stripe blue"></div>
+                        <div class="stripe red"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const mBtnCustomer = document.getElementById('main-btn-customer');
+        const mBtnCarrier = document.getElementById('main-btn-carrier');
+        const mContentCustomer = document.getElementById('main-content-customer');
+        const mContentCarrier = document.getElementById('main-content-carrier');
+
+        mBtnCustomer.addEventListener('click', () => {
+            mBtnCustomer.classList.add('active');
+            mBtnCarrier.classList.remove('active');
+            mContentCustomer.classList.add('active-content');
+            mContentCarrier.classList.remove('active-content');
+        });
+
+        mBtnCarrier.addEventListener('click', () => {
+            mBtnCarrier.classList.add('active');
+            mBtnCustomer.classList.remove('active');
+            mContentCarrier.classList.add('active-content');
+            mContentCustomer.classList.remove('active-content');
+        });
+    </script>
+
+    </div>
+
+    <footer class="main-footer">
+        <p>© 2026 TRANSPORT COMPANY — Цифровая логистическая платформа.</p>
+        <p>Все права защищены. Внутренний корпоративный портал управления.</p>
+    </footer>
+
+{% if messages %}
+<div class="messages-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000; max-width: 350px;">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}"
+         style="background: #fff5f5; border: 1px solid #ff9999; color: #ff3333; padding: 16px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px; font-weight: 500; font-size: 14px; position: relative;">
+        {{ message }}
+        <span onclick="this.parentElement.style.display='none'" style="position: absolute; top: 4px; right: 8px; cursor: pointer; color: #aaa; font-weight: bold;">&times;</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Личный кабинет | TRANSPORT COMPANY{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile_clean.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="catalog-wrapper">
+    <div class="profile-page-wrapper">
+
+        <div class="profile-title-block">
+            <h1>Личный кабинет</h1>
+            <p>Прозрачное управление профилем и вашими заказами</p>
+        </div>
+
+        <div class="profile-grid-container">
+
+            <div class="profile-sidebar profile-card-fix">
+                <div class="profile-meta-center">
+                    <div class="profile-avatar-circle">
+                        {{ user.full_name|default:user.username|slice:":1"|upper }}
+                    </div>
+                    <h4>{{ user.full_name|default:user.username }}</h4>
+                    <span class="role-badge">{{ user.get_role_display }}</span>
+                </div>
+
+                <hr class="profile-info-divider">
+
+                <div class="info-field-group">
+                    <label>Email адрес</label>
+                    <span>{{ user.email }}</span>
+                </div>
+                <div class="info-field-group">
+                    <label>Номер телефона</label>
+                    <span>{{ user.phone|default:"Не указан" }}</span>
+                </div>
+                <div class="info-field-group">
+                    <label>Дата регистрации</label>
+                    <span>{{ user.date_joined|date:"d.m.Y" }}</span>
+                </div>
+
+                <div class="profile-actions-flex">
+                    <a href="{% url 'users:profile_edit' %}" class="btn btn-outline-dark w-100 rounded-pill py-2 fw-semibold">Редактировать профиль</a>
+                    <form action="{% url 'users:logout' %}" method="post" class="m-0 w-100">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger w-100 rounded-pill py-2 fw-semibold">Выйти из аккаунта</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="profile-main-content profile-card-fix">
+                <h3>
+                    {% if user.role == 'driver' %}Мои рейсы{% else %}Мои заказы на перевозку{% endif %}
+                </h3>
+
+                <div id="orders-container">
+                    {% if user.role == 'driver' %}
+                        {% for assignment in assignments %}
+                        <div class="inner-order-card profile-order-item {% if forloop.counter > 3 %}hidden-item{% endif %}" style="border-left: 4px solid #0066ff !important;">
+                            <div class="card-header-flex">
+                                <span class="card-order-number">Рейс №{{ assignment.order.id }}</span>
+                                <span class="card-status-badge status-driver">{{ assignment.vehicle.plate_number }}</span>
+                            </div>
+                            <p class="card-route-text">
+                                Маршрут: <strong>{{ assignment.order.route.loading_address|default:assignment.order.loading_address }} → {{ assignment.order.route.unloading_address|default:assignment.order.unloading_address }}</strong>
+                            </p>
+                            <div class="card-footer-flex">
+                                <span class="card-price">{{ assignment.total_cost }} ₽</span>
+
+                                <button type="button" class="btn-action-cancel trigger-custom-modal"
+                                        data-order-id="{{ assignment.order.id }}"
+                                        data-is-driver="true">
+                                    Отказаться от рейса
+                                </button>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted m-0">История рейсов пуста.</p>
+                        {% endfor %}
+                    {% else %}
+                        {% for order in orders %}
+                        <div class="inner-order-card profile-order-item {% if forloop.counter > 3 %}hidden-item{% endif %}" style="border-left: 4px solid #f59e0b !important;">
+                            <div class="card-header-flex">
+                                <span class="card-order-number">Заказ №{{ order.id }}</span>
+                                <span class="card-status-badge status-client-created">{{ order.get_status_display }}</span>
+                            </div>
+                            <p class="card-route-text">
+                                Маршрут: <strong>{{ order.route.loading_address|default:order.loading_address }} → {{ order.route.unloading_address|default:order.unloading_address }}</strong>
+                            </p>
+                            <div class="card-footer-flex">
+                                <span class="card-price">{{ order.total_price|default:"0.00" }} ₽</span>
+
+                                {% if request.user.role == 'admin' or request.user.role == 'dispatcher' or order.status == 'created' and request.user.role == 'client' %}
+                                <button type="button" class="btn-action-cancel trigger-custom-modal"
+                                        data-order-id="{{ order.id }}"
+                                        data-is-driver="false">
+                                    Отменить заказ
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted m-0">История отправлений пуста.</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                {% if user.role == 'driver' and assignments|length > 3 or user.role != 'driver' and orders|length > 3 %}
+                <div class="load-more-wrapper">
+                    <button id="load-more-orders" class="btn btn-sm btn-link p-0 text-decoration-none load-more-btn">Показать ещё ↓</button>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="custom-modal-overlay" id="customCancelModal">
+    <div class="custom-modal-window">
+        <div class="custom-modal-header">
+            <h5 id="customModalTitle">Подтверждение отмены</h5>
+        </div>
+        <div class="custom-modal-body">
+            <p id="customModalText">Вы уверены? Действие нельзя будет отменить.</p>
+        </div>
+        <div class="custom-modal-footer">
+            <button type="button" class="btn-modal-close" id="customModalCloseBtn">Назад</button>
+            <form id="cancelOrderForm" action="" method="post" class="m-0">
+                {% csrf_token %}
+                <input type="hidden" name="order_id" id="modal-order-id">
+                <button type="submit" class="btn-modal-submit btn-danger-style" id="customModalSubmitBtn">Да, отменить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalOverlay = document.getElementById('customCancelModal');
+        const closeBtn = document.getElementById('customModalCloseBtn');
+
+        // Открытие модалки при клике
+        document.querySelectorAll('.trigger-custom-modal').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                const isDriver = this.getAttribute('data-is-driver') === 'true';
+
+                const modalTitle = document.getElementById('customModalTitle');
+                const modalBodyText = document.getElementById('customModalText');
+                const submitBtn = document.getElementById('customModalSubmitBtn');
+                const form = document.getElementById('cancelOrderForm');
+
+                document.getElementById('modal-order-id').value = orderId;
+
+                if (isDriver) {
+                    modalTitle.textContent = 'Отказ от рейса';
+                    modalBodyText.textContent = `Вы уверены, что хотите отказаться от выполнения рейса №${orderId}? Заказ вернется в обработку логистам.`;
+                    submitBtn.textContent = 'Да, отказаться';
+                    submitBtn.className = 'btn-modal-submit btn-warning-style';
+                    form.action = `/users/assignment/${orderId}/reject/`;
+                } else {
+                    modalTitle.textContent = 'Подтверждение отмены';
+                    modalBodyText.textContent = `Вы уверены, что хотите отменить заказ на транспортировку №${orderId}? Действие нельзя будет отменить.`;
+                    submitBtn.textContent = 'Да, отменить';
+                    submitBtn.className = 'btn-modal-submit btn-danger-style';
+                    form.action = `/users/order/${orderId}/cancel/`;
+                }
+
+                modalOverlay.classList.add('active');
+            });
+        });
+
+        // Закрытие модалки
+        if (closeBtn && modalOverlay) {
+            closeBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+            });
+        }
+
+        // Пагинация "Показать еще"
+        const loadMoreBtn = document.getElementById('load-more-orders');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => {
+                const hiddenItems = document.querySelectorAll('#orders-container .profile-order-item.hidden-item');
+                hiddenItems.forEach((item, i) => {
+                    if(i < 3) item.classList.remove('hidden-item');
+                });
+                if (document.querySelectorAll('#orders-container .profile-order-item.hidden-item').length === 0) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

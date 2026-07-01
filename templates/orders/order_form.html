@@ -1,0 +1,105 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Создание нового заказа | Транспортная Компания{% endblock %}
+
+{% block content %}
+<div class="order-page-container">
+    <div class="order-card">
+        <h2 class="order-title">
+            {% if is_edit %}Редактирование заказа #{{ order.id }}{% else %}Новая заявка на перевозку{% endif %}
+        </h2>
+        <p class="order-subtitle">Заполните параметры, чтобы опубликовать заказ в системе</p>
+
+        {% if form.errors %}
+        <div class="form-errors"
+             style="background-color: #fff5f5; border: 1px solid #ff9999; color: #ff3333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <strong>Пожалуйста, исправьте следующие ошибки:</strong>
+            <ul>
+                {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="non-field-errors">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+
+            <div class="form-section-title">Информация о заказчике</div>
+
+            <div class="form-group">
+                {% if is_edit %}
+                <label>Название компании / ФИО заказчика</label>
+                <input type="text" class="form-control" value="{{ order.client.first_name|default:order.client.username }}"
+                       readonly style="background-color: #e9ecef; color: #6c757d; cursor: not-allowed;">
+                {% else %}
+                <label for="{{ form.client_name.id_for_label }}">{{ form.client_name.label }}</label>
+                {{ form.client_name }}
+                {{ form.client_name.errors }}
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.client_phone.id_for_label }}">{{ form.client_phone.label|default:"Телефон заказчика" }}</label>
+                    {{ form.client_phone }}
+                    {{ form.client_phone.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.tax_profile.id_for_label }}">{{ form.tax_profile.label|default:"Налоговый профиль" }}</label>
+                    {{ form.tax_profile }}
+                    {{ form.tax_profile.errors }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.weight.label_tag }}
+                    {{ form.weight }}
+                </div>
+                <div class="form-group">
+                    {{ form.volume.label_tag }}
+                    {{ form.volume }}
+                </div>
+            </div>
+
+            <div class="form-section-title">Параметры рейса</div>
+
+            <div class="form-group">
+                <label for="{{ form.loading_address.id_for_label }}">{{ form.loading_address.label }}</label>
+                {{ form.loading_address }}
+                {{ form.loading_address.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.unloading_address.id_for_label }}">{{ form.unloading_address.label }}</label>
+                {{ form.unloading_address }}
+                {{ form.unloading_address.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'main:catalog' %}" class="btn-cancel">Отмена</a>
+
+                <button type="submit" class="btn-submit">
+                    {% if is_edit %}Сохранить изменения{% else %}Опубликовать заказ{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'users/css/manage_roles.css' %}">
+
+<div class="catalog-wrapper">
+    <div class="catalog-container">
+
+        <div class="catalog-header">
+            <h1>Управление ролями пользователей</h1>
+            <p>Здесь вы можете изменить статус пользователей. Назначение администраторов происходит только через панель Django Admin.</p>
+        </div>
+
+        <div class="roles-table-card">
+            <table class="roles-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Логин / ФИО</th>
+                        <th>Телефон / Email</th>
+                        <th>Текущая роль</th>
+                        <th>Закрепленный транспорт</th>
+                        <th style="text-align: right;">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users_list %}
+                    <tr>
+                        <td class="role-id">{{ u.id }}</td>
+                        <td>
+                            <span class="user-username">{{ u.username }}</span>
+                            <div style="font-size: 0.85rem; color: #4a5568; margin-top: 2px;">{{ u.full_name|default:"—" }}</div>
+                        </td>
+                        <td>
+                            <div class="user-contacts">
+                                {{ u.phone|default:"—" }}<br>
+                                <span class="user-email">{{ u.email }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge status-completed" style="background: #e6f0ff; color: #0066ff; white-space: nowrap;">
+                                {{ u.get_role_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if u.role == 'driver' %}
+                                {% if u.vehicle_set.all %}
+                                    {% for vehicle in u.vehicle_set.all %}
+                                        <div class="vehicle-info-block">
+                                            <strong>{{ vehicle.mark }}</strong>
+                                            <span class="vehicle-plate">{{ vehicle.plate_number }}</span>
+                                            <br>
+                                            <small style="color: #718096;">{{ vehicle.get_body_type_display }}, {{ vehicle.capacity }} т</small>
+                                            <div style="margin-top: 4px;">
+                                                {% if vehicle.is_active %}
+                                                    <span class="status-badge status-created" style="padding: 2px 8px; font-size: 0.75rem;">Активен</span>
+                                                {% else %}
+                                                    <span class="status-badge" style="background: #fff5f5; color: #e53e3e; padding: 2px 8px; font-size: 0.75rem;">Не активен</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <span style="color: #a0aec0; font-size: 0.85rem; font-style: italic;">Транспорт не закреплен</span>
+                                {% endif %}
+                            {% else %}
+                                <span style="color: #cbd5e0; font-size: 0.85rem;">—</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <form action="{% url 'users:change_role' u.id %}" method="POST" class="role-form">
+                                {% csrf_token %}
+                                <select name="role" class="form-control role-select-inline">
+                                    <option value="client" {% if u.role == 'client' %}selected{% endif %}>Клиент</option>
+                                    <option value="dispatcher" {% if u.role == 'dispatcher' %}selected{% endif %}>Логист</option>
+                                    <option value="driver" {% if u.role == 'driver' %}selected{% endif %}>Водитель</option>
+                                </select>
+                                <button type="submit" class="btn-order-details btn-update-inline">
+                                    Обновить
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="no-users-row">
+                            Доступных пользователей для редактирования не найдено.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

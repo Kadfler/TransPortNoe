@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Редактировать профиль | TRANSPORT COMPANY{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile_clean.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="catalog-wrapper">
+    <div class="profile-page-wrapper">
+        <div class="profile-container">
+
+            <div class="profile-edit-header">
+                <div class="header-text">
+                    <h1 class="edit-title">Редактирование</h1>
+                    <p class="edit-subtitle">Изменение личных данных аккаунта</p>
+                </div>
+                <a href="{% url 'users:profile' %}" class="btn-back">
+                    ← Назад
+                </a>
+            </div>
+
+            <div class="profile-card-fix">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="form-non-errors">
+                            {% for error in form.non_field_errors %}
+                                <p class="error-text">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="edit-form-group">
+                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+                            {# Рендерим само поле из Django-формы с его виджетами #}
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <ul class="edit-form-errors">
+                                    {% for error in field.errors %}
+                                        <li>❌ {{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <hr class="form-divider">
+
+                    <div class="form-actions">
+                        <a href="{% url 'users:profile' %}" class="btn-cancel">
+                            Отмена
+                        </a>
+                        <button type="submit" class="btn-submit">
+                            Сохранить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

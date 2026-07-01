@@ -1,0 +1,99 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Расчет стоимости | Транспортная Компания{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/order_cost.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="cost-page-wrapper">
+    <section class="catalog-section">
+        <div class="catalog-container">
+
+            <!-- Шапка страницы в стиле вашего CSS (.cost-page-header) -->
+            <div class="cost-page-header">
+                <h1>Алгоритм расчета стоимости</h1>
+                <p>Прозрачное ценообразование без скрытых комиссий и переплат</p>
+            </div>
+
+            <!-- Шаг 1 -->
+            <div class="cost-step-card step-1">
+                <div class="cost-step-title-block">
+                    <div class="cost-step-number">1</div>
+                    <h2>Базовый тариф (Километраж)</h2>
+                </div>
+                <p>
+                    Основа стоимости любого рейса — это расстояние между точкой А (Погрузка) и точкой Б (Выгрузка). Маршрут рассчитывается автоматически по оптимальным логистическим путям.
+                </p>
+                <div class="cost-formula-box">
+                    Формула: Расстояние (км) × 6,00 ₽
+                </div>
+            </div>
+
+            <!-- Шаг 2 -->
+            <div class="cost-step-card step-2">
+                <div class="cost-step-title-block">
+                    <div class="cost-step-number">2</div>
+                    <h2>Проверка плотности груза</h2>
+                </div>
+                <p>
+                    Для справедливого расчета система оценивает характер груза. Логистический стандарт плотности составляет <strong>250 кг/м³</strong>. Мы переводим вес в килограммы и делим его на объем:
+                </p>
+                <div class="cost-formula-box">
+                    Формула плотности: Фактический вес (кг) / Объем (м³)
+                </div>
+            </div>
+
+            <!-- Сетка шага 3 -->
+            <div class="cost-grid-sections">
+                <!-- Тяжелый груз -->
+                <div class="cost-sub-card">
+                    <div class="density-badge badge-heavy">
+                        <span class="emoji">🏋️‍♂️</span> Плотность ≥ 250 кг/м³
+                    </div>
+                    <h3>Тяжелый / Стандартный груз</h3>
+                    <p>
+                        К базовому тарифу за километраж добавляется фиксированная наценка за вес:
+                    </p>
+                    <div class="charge-value charge-heavy">
+                        + 500 ₽ за каждую тонну (т)
+                    </div>
+                </div>
+
+                <!-- Объемный груз -->
+                <div class="cost-sub-card">
+                    <div class="density-badge badge-volume">
+                        <span class="emoji">📦</span> Плотность &lt; 250 кг/м³
+                    </div>
+                    <h3>Объемный (легкий) груз</h3>
+                    <p>
+                        Груз занимает много места в кузове, но весит мало. Включается повышенный тариф за кубические метры:
+                    </p>
+                    <div class="charge-value charge-volume">
+                        + 300 ₽ за каждый куб. метр (м³)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Итоговый блок -->
+            <div class="cost-total-summary">
+                <h4>Итоговая стоимость заказа складывается из:</h4>
+                <p>
+                    <span class="cost-formula-structure">[Базовый километраж]</span>
+                    <span class="cost-formula-plus">+</span>
+                    <span class="cost-formula-structure">[Надбавка за вес ИЛИ объем]</span>
+                </p>
+                <div class="cost-action-btn-wrapper">
+                    <a href="{% url 'orders:order_create' %}" class="btn-submit cost-blue-btn">
+                        Оформить заявку на расчет
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+{% endblock %}

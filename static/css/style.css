@@ -1,0 +1,2717 @@
+/* ==========================================================================
+   1. ОБНУЛЕНИЕ БАЗОВЫХ СТИЛЕЙ И ОСНОВА
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #121922; /* Темный фон для нижней части сайта */
+    color: #fff;
+}
+
+.page-content {
+    flex: 1 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. ШАПКА И НАВИГАЦИЯ (НАВБАР)
+   ========================================================================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%;
+    position: absolute; /* Оставляем абсолютным, чтобы на главной ложился поверх hero */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    transition: background-color 0.3s ease, position 0.3s ease;
+}
+
+/* Класс для ГЛАВНОЙ страницы */
+.navbar-transparent {
+    background: transparent;
+}
+
+/* Класс для КАТАЛОГА и остальных внутренних страниц */
+.navbar-dark {
+    background-color: #0b1a30; /* Глубокий темно-синий цвет */
+    position: fixed; /* На внутренних страницах шапка будет зафиксирована при скролле */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.nav-username {
+    color: #0066ff !important; /* Выделим имя пользователя цветом */
+    font-weight: 600;
+}
+
+.btn-logout {
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.btn-logout:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   3. ГЛАВНАЯ СТРАНИЦА (HERO, СТАТИСТИКА, ПРЕИМУЩЕСТВА)
+   ========================================================================== */
+.hero {
+    background: radial-gradient(circle at top, #1e52a4 0%, #0a2240 70%);
+    padding: 140px 20px 120px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.2;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 50px;
+}
+
+.btn {
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-blue {
+    background-color: #0066ff;
+    color: white;
+}
+
+.btn-blue:hover {
+    background-color: #0052cc;
+}
+
+.btn-orange {
+    background-color: #ff5533;
+    color: white;
+}
+
+.btn-orange:hover {
+    background-color: #e04424;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.stat-item p {
+    font-size: 12px;
+    color: #a0b0c5;
+}
+
+.main-content {
+    background-color: #121922;
+    padding-bottom: 60px;
+}
+
+.cards-section {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.info-card {
+    flex: 1;
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center; /* ТУТ поменяли flex-start на center */
+    min-height: 220px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+}
+
+.card-light-blue {
+    background-color: #f4f9ff;
+}
+
+.card-light-green {
+    background-color: #f5fbf9;
+}
+
+.card-text-block {
+    margin-bottom: 24px;
+}
+
+.card-text-block h3 {
+    font-size: 22px;
+    color: #1e293b;
+    margin: 0 0 12px 0;
+    font-weight: 600;
+}
+
+.card-text-block p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+}
+
+.card-subtext {
+    font-size: 13px;
+    color: #3b82f6;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.card-subtext:hover {
+    text-decoration: underline;
+}
+
+.subtext-green {
+    color: #10b981;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.plus-icon {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.btn-blue-add {
+    background-color: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}
+
+.btn-blue-add:hover {
+    background-color: #2563eb;
+}
+
+.btn-green-add {
+    background-color: #63a391;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(99, 163, 145, 0.3);
+}
+
+.btn-green-add:hover {
+    background-color: #4f8777;
+}
+
+/* ==========================================================================
+   4. СЕКЦИЯ ПРЕИМУЩЕСТВ И ГЕО-БАННЕР
+   ========================================================================== */
+.trades-info-section {
+    background-color: #ffffff;
+    padding: 40px 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.trades-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.trades-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+    text-align: left;
+}
+
+.trades-header h2 {
+    font-size: 24px;
+    color: #1e293b;
+    margin: 0 0 6px 0;
+    font-weight: 600;
+}
+
+.trades-header p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.compact-switcher {
+    background-color: #f1f5f9;
+    padding: 4px;
+    border-radius: 20px;
+    display: inline-flex;
+}
+
+.compact-switcher .switch-btn {
+    border: none;
+    background: none;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.compact-switcher .switch-btn.active {
+    background-color: #ffffff;
+    color: #2563eb;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.compact-grid {
+    display: none;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.compact-grid.active-content {
+    display: grid;
+}
+
+.compact-card {
+    display: flex;
+    gap: 16px;
+    background: #f8fafc;
+    padding: 24px;
+    border-radius: 10px;
+    align-items: flex-start;
+    border: 1px solid #f1f5f9;
+    text-align: left;
+}
+
+.card-marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+
+.marker-blue {
+    background-color: #3b82f6;
+}
+
+.marker-green {
+    background-color: #10b981;
+}
+
+.marker-purple {
+    background-color: #8b5cf6;
+}
+
+.card-info h4 {
+    font-size: 16px;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-info h4 span {
+    font-size: 11px;
+    font-weight: 400;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.badge-text-blue {
+    color: #3b82f6;
+}
+
+.badge-text-green {
+    color: #10b981;
+}
+
+.badge-text-purple {
+    color: #8b5cf6;
+}
+
+.card-info p {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.geo-banner-section {
+    background-color: #ffffff;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.geo-banner-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    max-width: 1100px;
+    width: 100%;
+    padding: 40px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.05);
+    overflow: hidden;
+    position: relative;
+}
+
+.geo-banner-content {
+    flex: 1.2;
+    z-index: 2;
+}
+
+.geo-banner-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #2563eb;
+    background: #ffffff;
+    padding: 6px 14px;
+    border-radius: 100px;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+    margin-bottom: 20px;
+}
+
+.geo-banner-content h2 {
+    font-size: 32px;
+    color: #1e293b;
+    font-weight: 800;
+    margin: 0 0 14px 0;
+}
+
+.geo-banner-content p {
+    font-size: 15px;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0 0 28px 0;
+    max-width: 540px;
+}
+
+.geo-banner-features {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.geo-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    background: #ffffff;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.geo-feature-item .feature-icon {
+    color: #2563eb;
+    font-size: 16px;
+}
+
+.geo-banner-visual {
+    flex: 0.8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 220px;
+}
+
+.flag-widget-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glossy-round-flag {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 24px rgba(30, 41, 59, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    border: 4px solid #ffffff;
+    z-index: 3;
+}
+
+.glossy-round-flag .stripe {
+    flex: 1;
+    width: 100%;
+}
+
+.glossy-round-flag .white {
+    background-color: #ffffff;
+}
+
+.glossy-round-flag .blue {
+    background-color: #0039a6;
+}
+
+.glossy-round-flag .red {
+    background-color: #d52b1e;
+}
+
+.mini-geo-tag {
+    position: absolute;
+    background: #ffffff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e293b;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    z-index: 4;
+    white-space: nowrap;
+    animation: geoFloat 4s ease-in-out infinite;
+}
+
+.tag-1 {
+    top: 0;
+    left: -10px;
+    animation-delay: 0s;
+}
+
+.tag-2 {
+    bottom: 10px;
+    right: -20px;
+    animation-delay: 1.5s;
+}
+
+.tag-3 {
+    top: 30px;
+    right: -30px;
+    animation-delay: 0.7s;
+}
+
+.floating-orbit {
+    position: absolute;
+    border: 1px dashed #93c5fd;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.orbit-1 {
+    width: 150px;
+    height: 150px;
+}
+
+.orbit-2 {
+    width: 200px;
+    height: 200px;
+    opacity: 0.5;
+}
+
+@keyframes geoFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@media (max-width: 768px) {
+    .geo-banner-card {
+        flex-direction: column;
+        padding: 30px 24px;
+        text-align: center;
+    }
+
+    .geo-banner-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .geo-banner-features {
+        justify-content: center;
+    }
+
+    .geo-banner-visual {
+        min-height: 160px;
+    }
+}
+
+/* ==========================================================================
+   5. СТРАНИЦА КАТАЛОГА ЗАКАЗОВ
+   ========================================================================== */
+.catalog-wrapper, .order-page-container {
+    background-color: #f8f9fa !important;
+    min-height: calc(100vh - 150px); /* Растягивает белую зону до самого низа */
+    padding-top: 140px !important; /* Чтобы шапка navbar-dark не перекрывала h1 */
+    padding-bottom: 60px !important;
+    box-sizing: border-box;
+}
+
+/* Контейнер каталога: центрирует контент и делает отступы от краев монитора */
+.catalog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px; /* Чуть-чуть отлепили карточки и заголовок от левого и правого краев */
+    box-sizing: border-box;
+}
+
+.catalog-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0b1a30 !important; /* Делаем заголовок темно-синим, чтобы его было видно */
+    margin-bottom: 8px;
+}
+
+.catalog-header p {
+    color: #718096 !important; /* Делаем подзаголовок серым */
+    margin-bottom: 30px;
+}
+
+/* Сетка для карточек */
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 30px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   6. СТРАНИЦЫ АВТОРИЗАЦИИ И РЕГИСТРАЦИИ (AUTH)
+   ========================================================================== */
+.auth-wrapper {
+    padding-top: 140px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    padding-bottom: 60px;
+}
+
+.auth-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(11, 26, 48, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 32px;
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0b1a30;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    color: #718096;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.errorlist {
+    color: #ff5533;
+    list-style: none;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    padding: 0;
+}
+
+.non-field-errors {
+    background: #fff5f5;
+    color: #e53e3e;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+.auth-switch a {
+    color: #0066ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   7. СТРАНИЦА СОЗДАНИЯ ЗАКАЗА И СТРУКТУРА ФОРМЫ (ОБНОВЛЕНО)
+   ========================================================================== */
+.order-wrapper, .order-page-container {
+    flex: 1 0 auto; /* Растягивает блок контента, прижимая футер строго к низу */
+    background-color: #f8f9fa; /* Белый/серый фон для удобства чтения */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.order-page-container {
+    padding-top: 140px; /* Безопасный отступ сверху от фиксированного навбара */
+    padding-bottom: 60px;
+}
+
+.order-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 550px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(11, 26, 48, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 40px;
+}
+
+.order-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0b1a30;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.order-subtitle {
+    font-size: 0.9rem;
+    color: #718096;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Элементы полей и разметка формы */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: 1px solid #cbd5e0;
+    background-color: #ffffff;
+    color: #2d3748;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #0066ff;
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
+}
+
+/* Разделение формы на логические блоки (Заказчик / Маршрут) */
+.form-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0b1a30;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 6px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    text-align: left;
+    width: 100%;
+}
+
+/* Двухколоночная сетка для телефона и типа НДС */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 90px;
+    font-family: inherit;
+}
+
+/* Кнопки управления формой */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-submit {
+    display: block; /* Превращаем в блочный элемент */
+    margin: 20px auto 0 auto; /* Центрируем по горизонтали и делаем отступ сверху */
+    padding: 12px 40px; /* Делаем кнопку приятной по ширине */
+    background-color: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #0052cc;
+}
+
+.btn-cancel {
+    flex: 1;
+    background-color: #edf2f7;
+    color: #4a5568;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #e2e8f0;
+}
+
+/* ==========================================================================
+   8. ДЕТАЛИЗАЦИЯ КАРТОЧКИ ЗАКАЗА (ДЛЯ КАТАЛОГА)
+   ========================================================================== */
+.order-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(11, 26, 48, 0.08);
+}
+
+.order-route {
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.route-label {
+    font-size: 0.75rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.route-address {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.4;
+}
+
+.route-arrow {
+    color: #0066ff;
+    font-weight: bold;
+    margin: 4px 0;
+    display: block;
+}
+
+.route-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.route-distance {
+    background: #e6f0ff;
+    color: #0066ff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.status-created {
+    background: #e3fcef;
+    color: #006644;
+}
+
+.status-in_progress {
+    background: #fff0b3;
+    color: #824400;
+}
+
+.status-completed {
+    background: #eae6ff;
+    color: #403294;
+}
+
+.order-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.spec-label {
+    font-size: 0.75rem;
+    color: #718096;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.spec-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.order-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid #edf2f7;
+}
+
+.order-price-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: 0.75rem;
+    color: #718096;
+}
+
+.price-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0066ff;
+}
+
+.btn-order-details {
+    background-color: #0066ff;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-order-details:hover {
+    background-color: #0052cc;
+}
+
+/* ==========================================================================
+   9. ПОДВАЛ САЙТА (FOOTER) И АДАПТИВНОСТЬ
+   ========================================================================== */
+.main-footer {
+    background-color: #eef2f7;
+    color: #333;
+    padding: 40px 10%;
+    font-size: 13px;
+    line-height: 1.6;
+    flex-shrink: 0; /* Гарантирует, что футер сохранит высоту и не сожмется */
+}
+
+/* Адаптивность для мобильных телефонов (меньше 576px) */
+@media (max-width: 576px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+/* ==========================================================================
+   10. СТРАНИЦА ДЕТАЛЕЙ ЗАКАЗА (ORDER DETAIL)
+   ========================================================================== */
+.order-detail-container {
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 150px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.order-detail-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 650px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(11, 26, 48, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.order-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 16px;
+}
+
+.order-detail-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0b1a30;
+    margin: 0 0 4px 0;
+}
+
+.order-detail-header p {
+    color: #718096;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.order-detail-price {
+    text-align: right;
+}
+
+.price-sublabel {
+    font-size: 0.75rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.order-detail-route {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.route-sublabel {
+    font-size: 0.75rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.route-info-block {
+    font-size: 1rem;
+    color: #2d3748;
+    line-height: 1.5;
+}
+
+.route-info-block .arrow-down {
+    color: #0066ff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding-left: 20px;
+    margin: 4px 0;
+}
+
+.route-detail-footer {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-spec-box {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+.order-detail-description {
+    margin-bottom: 32px;
+}
+
+.description-text {
+    font-size: 0.95rem;
+    color: #4a5568;
+    line-height: 1.6;
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    padding: 16px;
+    border-radius: 8px;
+    min-height: 60px;
+}
+
+.detail-actions-row {
+    display: flex;
+    gap: 16px;
+    border-top: 1px solid #edf2f7;
+    padding-top: 24px;
+}
+
+.btn-detail-back {
+    flex: 1;
+    background-color: #edf2f7;
+    color: #4a5568;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn-detail-back:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-detail-edit {
+    flex: 1;
+    background-color: #ffaa00;
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-detail-delete {
+    flex: 1;
+    background-color: #ff5533;
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-detail-accept {
+    flex: 2;
+    background-color: #0066ff;
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn-detail-accept:hover {
+    background-color: #0052cc;
+}
+
+/* Обертка страницы с таким же поведением и фоном, как у .catalog-wrapper */
+.cost-page-wrapper {
+    background-color: #f8f9fa !important;
+    min-height: calc(100vh - 150px);
+    padding-top: 140px !important; /* Отступ под фиксированный navbar-dark */
+    padding-bottom: 60px !important;
+    box-sizing: border-box;
+}
+
+/* Шапка страницы в стиле заголовка каталога */
+.cost-page-header {
+    text-align: left; /* Выравнивание по левому краю, как в каталоге */
+    margin-bottom: 35px;
+}
+
+.cost-page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0b1a30 !important; /* Фирменный темно-синий */
+    margin-bottom: 8px;
+}
+
+.cost-page-header p {
+    color: #718096 !important; /* Серый подзаголовок */
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Карточки шагов (как карточки заказов) */
+.cost-step-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 30px 35px;
+    margin-bottom: 24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cost-step-title-block {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.cost-step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.step-1 .cost-step-number {
+    background: #e3fcef;
+    color: #006644;
+}
+
+.step-2 .cost-step-number {
+    background: #e6f0ff;
+    color: #0066ff;
+}
+
+.cost-step-card h2 {
+    font-size: 1.35rem;
+    color: #2d3748;
+    margin: 0;
+    font-weight: 700;
+}
+
+.cost-step-card p {
+    color: #4a5568;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+}
+
+/* Формулы внутри блоков */
+.cost-formula-box {
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.step-1 .cost-formula-box {
+    background-color: #f4fbf9;
+    border-left: 4px solid #10b981;
+}
+
+.step-2 .cost-formula-box {
+    background-color: #f4f9ff;
+    border-left: 4px solid #0066ff;
+}
+
+/* Сетка карточек 3-го шага */
+.cost-grid-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.cost-sub-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+}
+
+.cost-sub-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: #2d3748;
+    font-weight: 700;
+}
+
+.cost-sub-card p {
+    color: #718096;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.density-badge {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+}
+
+.density-badge .emoji {
+    margin-right: 6px;
+}
+
+.badge-heavy {
+    color: #dd6b20;
+}
+
+.badge-volume {
+    color: #e53e3e;
+}
+
+.charge-value {
+    margin-top: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.charge-heavy {
+    color: #dd6b20;
+    background-color: #fffaf0;
+}
+
+.charge-volume {
+    color: #e53e3e;
+    background-color: #fff5f5;
+}
+
+/* Финальная карточка-итого */
+.cost-total-summary {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+}
+
+.cost-total-summary h4 {
+    margin: 0 0 12px 0;
+    color: #0b1a30;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.cost-total-summary p {
+    color: #718096;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.cost-formula-structure {
+    color: #0066ff;
+    background: #e6f0ff;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.cost-formula-plus {
+    color: #718096;
+    margin: 0 4px;
+}
+
+.cost-action-btn-wrapper {
+    margin-top: 20px;
+}
+
+/* Кнопка в фирменном стиле каталога */
+.cost-blue-btn {
+    background-color: #0066ff !important;
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 28px !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+}
+
+.cost-blue-btn:hover {
+    background-color: #0052cc !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .cost-grid-sections {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Базовые стили подвала */
+.main-footer {
+    background-color: #0b1424; /* Глубокий темно-синий цвет, под твой навбар */
+    color: #94a3b8; /* Мягкий цвет текста */
+    padding: 30px 20px;
+    margin-top: 60px; /* Отступ от контента страницы */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Контейнер для выравнивания */
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* Левая часть: копирайт и название */
+.footer-copy {
+    font-size: 0.95rem;
+    color: #94a3b8;
+}
+
+.footer-copy strong {
+    color: #ffffff; /* Выделяем название компании белым */
+    font-weight: 600;
+}
+
+/* Правая часть: блок ссылок */
+.footer-links {
+    display: flex;
+    gap: 24px;
+}
+
+/* Красивые и аккуратные ссылки вместо синих */
+.footer-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* Эффект при наведении */
+.footer-link:hover {
+    color: #3b82f6; /* Мягкий синий акцент */
+}
+
+/* Адаптивность для мобилок (все встанет по центру) */
+@media (max-width: 640px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+        gap: 20px;
+    }
+}
+
+/* ==========================================================================
+   11. СТРАНИЦА УПРАВЛЕНИЯ РОЛЯМИ (ПОД СТИЛИСТИКУ КАТАЛОГА)
+   ========================================================================== */
+
+/* Обертка всей страницы (задает светлый фон и отступ от навбара) */
+.roles-page-wrapper {
+    background-color: #f8f9fa !important;
+    min-height: calc(100vh - 150px);
+    padding-top: 140px !important;
+    padding-bottom: 60px !important;
+    box-sizing: border-box;
+    color: #2d3748 !important;
+}
+
+/* Контейнер для центрирования контента */
+.roles-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+/* Стилизация заголовков */
+.roles-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0b1a30 !important;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.roles-header p {
+    color: #718096 !important;
+    font-size: 1rem;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+/* Новая широкая карточка подложки на замену .order-card */
+.roles-table-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 30px;
+    width: 100%;
+    max-width: 1200px; /* Теперь карточка широкая, как весь каталог */
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow-x: auto;
+}
+
+/* Базовые стили таблицы */
+.roles-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.roles-table th {
+    font-size: 0.8rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 16px;
+    border-bottom: 2px solid #edf2f7;
+    font-weight: 700;
+}
+
+.roles-table td {
+    padding: 16px;
+    font-size: 0.95rem;
+    color: #2d3748;
+    border-bottom: 1px solid #edf2f7;
+    vertical-align: middle;
+}
+
+.roles-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Стили элементов внутри строк */
+.role-id {
+    font-weight: 700;
+    color: #a0aec0;
+}
+
+.user-username {
+    font-weight: 600;
+    color: #0b1a30;
+    font-size: 1rem;
+}
+
+.user-contacts {
+    line-height: 1.4;
+    font-size: 0.9rem;
+}
+
+.user-email {
+    color: #718096;
+    font-size: 0.85rem;
+}
+
+/* Стили инфо-блока транспорта */
+.vehicle-info-block {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: inline-block;
+    min-width: 180px;
+    line-height: 1.3;
+}
+
+.vehicle-plate {
+    background: #edf2f7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-left: 4px;
+}
+
+/* Форма обновления роли внутри ячейки */
+.role-form {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.role-select-inline {
+    width: auto !important;
+    padding: 8px 12px !important;
+    font-size: 0.9rem !important;
+    height: auto !important;
+}
+
+.btn-update-inline {
+    padding: 10px 16px !important;
+    font-size: 0.85rem !important;
+    background-color: #ffaa00 !important;
+    white-space: nowrap;
+}
+
+.btn-update-inline:hover {
+    background-color: #e69900 !important;
+}
+
+.no-users-row {
+    text-align: center;
+    color: #718096;
+    padding: 40px 0;
+}
+
+/* static/css/profile.css */
+
+.hidden-item {
+    display: none !important;
+}
+
+.card-custom {
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+}
+
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+/* Кастомные скругления для модального окна в стиле скриншота */
+.modal-content-custom {
+    border-radius: 16px;
+    border: none;
+}
+
+/* Изолированные светлые стили для Личного Кабинета */
+.profile-page-wrapper {
+    background-color: #f4f6f9 !important; /* Светлый фон всей страницы */
+    min-height: 100vh;
+    color: #1e293b !important;
+    font-family: sans-serif;
+    box-sizing: border-box;
+    padding-bottom: 60px;
+}
+
+/* Флекс-сетка для двух колонок */
+.profile-grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Основные белые карточки (Стиль один в один как в каталоге) */
+.profile-card-fix {
+    background-color: #ffffff !important;
+    border-radius: 16px !important;
+    padding: 30px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important; /* Мягкая аккуратная тень */
+    border: none !important;
+}
+
+.profile-sidebar {
+    flex: 1 1 350px;
+    height: fit-content;
+}
+
+.profile-main-content {
+    flex: 2 1 600px;
+}
+
+/* Принудительный цвет текстов для светлой темы */
+.profile-page-wrapper h1 {
+    color: #0f172a !important;
+}
+
+.profile-card-fix h3,
+.profile-card-fix h4,
+.profile-card-fix h5,
+.profile-card-fix h6,
+.profile-card-fix strong {
+    color: #0f172a !important;
+}
+
+.profile-card-fix p,
+.profile-card-fix span,
+.profile-card-fix label,
+.profile-card-fix small {
+    color: #64748b !important; /* Серый аккуратный текст */
+}
+
+/* Внутренние аккуратные плашки для заказов/рейсов */
+.inner-order-card {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.inner-order-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Круглый аватар пользователя */
+.profile-avatar-circle {
+    background-color: #f1f5f9 !important;
+    width: 75px;
+    height: 75px;
+    font-size: 28px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Кнопки */
+.profile-card-fix .btn-outline-dark {
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+.profile-card-fix .btn-outline-dark:hover {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+}
+
+.hidden-item {
+    display: none !important;
+}
+
+/* Общие обертки страницы */
+.profile-title-block {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    padding: 0 15px;
+}
+
+.profile-title-block h1 {
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 5px;
+    color: #0f172a;
+}
+
+.profile-title-block p {
+    margin: 0;
+    font-size: 16px;
+    color: #718096 !important;
+}
+
+/* Левая колонка - Профиль */
+.profile-meta-center {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.profile-meta-center h4 {
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #0f172a;
+}
+
+.role-badge {
+    background-color: #f1f5f9;
+    color: #334155 !important;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    border: 1px solid #e2e8f0;
+}
+
+.profile-info-divider {
+    border-color: #e2e8f0;
+    margin: 20px 0;
+    opacity: 0.8;
+}
+
+.info-field-group {
+    margin-bottom: 16px;
+}
+
+.info-field-group:last-of-type {
+    margin-bottom: 24px;
+}
+
+.info-field-group label {
+    font-size: 12px;
+    display: block;
+    margin-bottom: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #718096;
+}
+
+.info-field-group span {
+    font-weight: 600;
+    font-size: 15px;
+    color: #0f172a !important;
+}
+
+.profile-actions-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Правая колонка - Заказы */
+.profile-main-content h3 {
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #0f172a;
+}
+
+/* КРАСИВЫЕ КАРТОЧКИ ЗАКАЗОВ (Фикс верстки) */
+.inner-order-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.inner-order-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-order-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.card-status-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+
+.status-driver {
+    background-color: #0f172a;
+    color: #ffffff !important;
+}
+
+.status-client-created {
+    background-color: #fef3c7;
+    color: #d97706 !important;
+}
+
+.card-route-text {
+    margin: 0;
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.card-route-text strong {
+    color: #1e293b;
+}
+
+.card-footer-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.card-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0066ff;
+}
+
+/* Кнопки действий */
+.btn-action-cancel {
+    background-color: transparent;
+    color: #ef4444;
+    border: 1px solid #fca5a5;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-action-cancel:hover {
+    background-color: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+}
+
+.load-more-wrapper {
+    margin-top: 20px;
+}
+
+.load-more-btn {
+    font-weight: 700;
+    font-size: 14px;
+    color: #0066ff !important;
+}
+
+/* СТИЛИ ЧИСТОЙ НАЙТИВНОЙ МОДАЛКИ (Без багов Бутстрапа) */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.custom-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.custom-modal-window {
+    background: #ffffff;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+
+.custom-modal-overlay.active .custom-modal-window {
+    transform: scale(1);
+}
+
+.custom-modal-header h5 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.custom-modal-body p {
+    margin: 0 0 24px 0;
+    font-size: 15px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.custom-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-modal-close {
+    background: #f1f5f9;
+    color: #475569;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-modal-submit {
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.btn-danger-style {
+    background-color: #ef4444;
+}
+
+.btn-warning-style {
+    background-color: #f59e0b;
+}
+/* ==========================================================================
+   1. ИЗОЛИРОВАННЫЙ БЕЛЫЙ ФОН (Только для этой страницы)
+   ========================================================================== */
+
+/* Создаем белую подложку на весь экран, которая перекроет темный body из base.html */
+.logistics-inner-container::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff; /* Чистый белый фон */
+    z-index: -1; /* Уводим назад, чтобы контент был сверху */
+}
+
+/* Основной контейнер страницы */
+.logistics-inner-container {
+    position: relative; /* Чтобы z-index подложки работал корректно */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 24px 100px 24px; /* Увеличили верхний отступ с 40px до 120px */
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: calc(100vh - 150px);
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. ЗАГОЛОВКИ ТЕКСТА
+   ========================================================================== */
+
+.logistics-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f172a !important; /* Принудительно темный */
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.logistics-subtitle {
+    font-size: 14px;
+    color: #64748b !important; /* Принудительно серый */
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   3. ТАБЛИЦА И КАРТОЧКА-ОБЕРТКА
+   ========================================================================== */
+
+/* Белая карточка вокруг таблицы с мягкой тенью и серой рамкой */
+.logistics-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.logistics-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+}
+
+/* Шапка таблицы: мелкий серый шрифт капсом */
+.logistics-table th {
+    padding: 16px 20px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Ячейки строк */
+.logistics-table td {
+    padding: 20px;
+    font-size: 14px;
+    color: #334155;
+    border-bottom: 1px solid #f8fafc;
+    vertical-align: middle;
+}
+
+/* ==========================================================================
+   4. КОНТЕНТ ВНУТРИ ЯЧЕЕК (Маршруты, ID, Цены)
+   ========================================================================== */
+
+.order-id {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.address-loading {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 14px;
+}
+
+.address-unloading {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.order-price {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Бейджи статусов */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.status-badge.status-new { background-color: #e0e7ff; color: #4f46e5; }
+.status-badge.status-in_progress { background-color: #e0f2fe; color: #0284c7; }
+.status-badge.status-completed { background-color: #dcfce7; color: #16a34a; }
+
+/* ==========================================================================
+   5. КАРТОЧКА АВТОМОБИЛЯ (Блок "bibika" с макета)
+   ========================================================================== */
+
+.vehicle-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: inline-block;
+    min-width: 200px;
+    text-align: left;
+}
+
+.vehicle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.vehicle-name {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 13px;
+}
+
+.vehicle-plate {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.vehicle-type {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.vehicle-status {
+    font-size: 11px;
+    color: #2563eb;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.no-assignment {
+    color: #94a3b8;
+}
+
+/* ==========================================================================
+   6. ФОРМЫ, СЕЛЕКТЫ И КНОПКИ
+   ========================================================================== */
+
+.action-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-start;
+}
+
+.action-buttons-group {
+    display: flex;
+    gap: 8px;
+}
+
+/* Выпадающий список */
+.select-custom {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+    color: #334155;
+    background: #fff;
+    min-width: 180px;
+    outline: none;
+}
+
+/* Базовый класс для всех кнопок в таблице */
+.btn-table {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, transform 0.1s;
+}
+.btn-table:active {
+    transform: scale(0.98);
+}
+
+/* Яркая оранжевая кнопка действия (Назначить) */
+.btn-table-primary {
+    background: #ff9f00;
+    color: #ffffff;
+}
+.btn-table-primary:hover {
+    background: #e68f00;
+}
+
+/* Серые второстепенные кнопки (Отвязать) */
+.btn-table-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+.btn-table-secondary:hover {
+    background: #e2e8f0;
+}
+
+/* Зеленые кнопки успешного завершения (Завершить) */
+.btn-table-success {
+    background: #10b981;
+    color: #ffffff;
+}
+.btn-table-success:hover {
+    background: #059669;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+/* Контейнер и общая структура */
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 15px;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.profile-edit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.edit-title {
+    font-weight: 700;
+    font-size: 28px;
+    margin: 0 0 5px 0;
+    color: #0f172a;
+}
+
+.edit-subtitle {
+    margin: 0;
+    font-size: 15px;
+    color: #718096;
+}
+
+/* Кнопка "Назад" */
+.btn-back {
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 18px;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+}
+
+/* Карточка */
+.profile-card-fix {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Поля ввода и группы */
+.edit-form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* Элементы встают друг под друга */
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+/* Кастомизация Django-инпутов с классом form-control */
+.profile-card-fix .form-control {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    color: #334155;
+    font-size: 15px;
+    transition: all 0.2s ease-in-out;
+}
+
+.profile-card-fix .form-control:focus {
+    outline: none;
+    border-color: #0066ff;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.15);
+}
+
+/* Ошибки */
+.form-non-errors {
+    background-color: #fef2f2;
+    border: 1px solid #fca5a5;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.error-text {
+    color: #b91c1c;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.edit-form-errors {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0 0;
+    font-size: 13px;
+    color: #dc2626;
+}
+
+/* Разделитель */
+.form-divider {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    margin: 25px 0;
+}
+
+/* Блок кнопок */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    color: #4a5568;
+    background-color: #f1f5f9;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 24px;
+    transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-submit {
+    background-color: #0066ff;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    padding: 10px 28px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #0052cc;
+}
+
+/* Панель фильтров и поиска */
+.filter-panel {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 30px;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group.wide {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group.date-width {
+    width: 150px;
+    min-width: 130px;
+}
+
+.filter-group.status-width {
+    width: 160px;
+    min-width: 140px;
+}
+
+.filter-group.weight-width {
+    width: 180px;
+    min-width: 150px;
+}
+
+.filter-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 6px;
+}
+
+.filter-input,
+.filter-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    color: #2d3748;
+    transition: border-color 0.2s;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    outline: none;
+    border-color: #0066ff;
+}
+
+/* Кнопки управления фильтрами */
+.filter-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-filter-submit {
+    background: #0066ff;
+    color: #fff;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.btn-filter-submit:hover {
+    background: #0052cc;
+}
+
+.btn-filter-reset {
+    background: #e2e8f0;
+    color: #4a5568;
+    text-decoration: none;
+    padding: 11px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.btn-filter-reset:hover {
+    background: #cbd5e1;
+}
+
+/* Блок Пагинации */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    gap: 8px;
+}
+
+.pagination-link {
+    padding: 10px 16px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.pagination-link:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.pagination-link.active {
+    padding: 10px 16px;
+    background: #0066ff;
+    color: #ffffff;
+    border: 1px solid #0066ff;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* Шапка каталога и заголовки */
+.catalog-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* Явно задаем цвет для главного заголовка H1, чтобы он не сливался */
+.catalog-header-flex h1 {
+    color: #1e293b; /* Глубокий темно-синий/грифельный цвет */
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Стили для подзаголовка */
+.catalog-header-sub {
+    color: #64748b; /* Спокойный серый цвет для описания */
+    margin: 6px 0 0 0;
+    font-size: 1rem;
+}
+
+.btn-add-order-top {
+    background-color: #0066ff;
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-block;
+    transition: background-color 0.2s;
+}
+
+.btn-add-order-top:hover {
+    background-color: #0052cc;
+}
+
+.empty-catalog-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(11, 26, 48, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 40px 32px;
+    text-align: center;
+    box-sizing: border-box;
+}

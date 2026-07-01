@@ -1,0 +1,119 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {% if is_edit %}Редактирование транспорта | Транспортная Компания{% else %}Добавление транспорта | Транспортная Компания{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="order-page-container">
+    <div class="order-card">
+        <h2 class="order-title">
+            {% if is_edit %}Редактирование транспорта{% else %}Новое транспортное средство{% endif %}
+        </h2>
+        <p class="order-subtitle">Заполните технические характеристики автомобиля для внесения в систему</p>
+
+        {# Блок вывода ошибок формы #}
+        {% if form.errors %}
+        <div class="form-errors"
+             style="background-color: #fff5f5; border: 1px solid #ff9999; color: #ff3333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <strong>Пожалуйста, исправьте следующие ошибки:</strong>
+            <ul>
+                {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <li>{{ field.label|default:field }}: {{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="non-field-errors">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="form-section-title">Характеристики автомобиля</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.mark.id_for_label }}">{{ form.mark.label|default:"Марка и модель" }}</label>
+                    {{ form.mark }}
+                    {{ form.mark.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.plate_number.id_for_label }}">{{ form.plate_number.label|default:"Гос. номер" }}</label>
+                    {{ form.plate_number }}
+                    {{ form.plate_number.errors }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.body_type.id_for_label }}">{{ form.body_type.label|default:"Тип кузова" }}</label>
+                    {{ form.body_type }}
+                    {{ form.body_type.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.capacity.id_for_label }}">{{ form.capacity.label|default:"Грузоподъемность (т)" }}</label>
+                    {{ form.capacity }}
+                    {{ form.capacity.errors }}
+                </div>
+            </div>
+
+            <div class="form-section-title">Финансовые показатели и учет</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.base_rate_per_km.id_for_label }}">{{ form.base_rate_per_km.label|default:"Ставка за км (₽)" }}</label>
+                    {{ form.base_rate_per_km }}
+                    {{ form.base_rate_per_km.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.mileage.id_for_label }}">{{ form.mileage.label|default:"Текущий пробег (км)" }}</label>
+                    {{ form.mileage }}
+                    {{ form.mileage.errors }}
+                </div>
+            </div>
+
+            <div class="form-section-title">Ответственные лица</div>
+
+            <div class="form-group">
+                <label for="{{ form.driver.id_for_label }}">{{ form.driver.label|default:"Назначенный водитель" }}</label>
+
+                {% if is_only_driver %}
+                    <div class="driver-readonly-badge"
+                         style="background-color: #f1f5f9; padding: 12px 16px; border-radius: 6px; border: 1px solid #cbd5e1; color: #4a5568; font-weight: 600; margin-top: 5px;">
+                        👤 {{ request.user.full_name|default:request.user.username }} (Вы)
+                    </div>
+                    <div style="display: none;">{{ form.driver }}</div>
+                {% else %}
+                    {{ form.driver }}
+                    {{ form.driver.errors }}
+                {% endif %}
+            </div>
+
+            {# Показываем чекбокс активности только при редактировании, при создании он true по умолчанию #}
+            {% if is_edit and form.is_active %}
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+                {{ form.is_active }}
+                <label for="{{ form.is_active.id_for_label }}" style="margin-bottom: 0; cursor: pointer;">
+                    {{ form.is_active.label|default:"Автомобиль активен и доступен для заказов" }}
+                </label>
+            </div>
+            {% endif %}
+
+            <div class="form-actions" style="margin-top: 35px;">
+                <a href="{% url 'vehicles:vehicle_list' %}" class="btn-cancel">Отмена</a>
+
+                <button type="submit" class="btn-submit">
+                    {% if is_edit %}Сохранить изменения{% else %}Добавить в базу{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

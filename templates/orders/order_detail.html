@@ -1,0 +1,90 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Заказ #{{ order.id }} | Транспортная Компания{% endblock %}
+
+{% block content %}
+<div class="catalog-wrapper order-detail-container">
+    <div class="order-detail-card">
+
+        <div class="order-detail-header">
+            <div>
+                <h1>Заказ #{{ order.id }}</h1>
+                <p>Статус:
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                </p>
+            </div>
+            <div class="order-detail-price">
+                <div class="order-detail-price">
+                    <span class="price-sublabel">Стоимость</span>
+                    <span class="price-value" style="color: #0066ff; font-weight: bold;">
+        {% if order.total_price %}
+            {{ order.total_price }} ₽
+        {% else %}
+            Расчет стоимости...
+        {% endif %}
+    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-detail-route">
+            <span class="route-sublabel">Маршрут транспортировки</span>
+
+            <div class="route-info-block">
+                <div><strong>А (Погрузка):</strong> {{ order.loading_address }}</div>
+                <div class="arrow-down">↓</div>
+                <div><strong>Б (Выгрузка):</strong> {{ order.unloading_address }}</div>
+            </div>
+
+            <div class="route-detail-footer">
+                <span style="font-size: 0.9rem; color: #4a5568;">Расстояние:</span>
+                <span class="route-distance">
+    {% if order.route and order.route.distance_km %}{{ order.route.distance_km }} км{% else %}Расчет...{% endif %} </span>
+            </div>
+        </div>
+
+        <div class="order-specs">
+            <div class="detail-spec-box">
+                <span class="spec-label">Заказчик</span>
+                <span class="spec-value">{{ order.client.first_name|default:order.client.username }}</span>
+            </div>
+            <div class="detail-spec-box">
+                <span class="spec-label">Вес груза</span>
+                <span class="spec-value">{% if order.weight %}{{ order.weight }} т{% else %}—{% endif %}</span>
+            </div>
+            <div class="detail-spec-box">
+                <span class="spec-label">Объем груза</span>
+                <span class="spec-value">{% if order.volume %}{{ order.volume }} м³{% else %}—{% endif %}</span>
+            </div>
+            <div class="detail-spec-box">
+                <span class="spec-label">Профиль НДС</span>
+                <span class="spec-value">{{ order.client.tax_profile|default:"Без НДС" }}</span>
+            </div>
+        </div>
+
+        <div class="order-detail-description">
+            <span class="spec-label">Дополнительное описание</span>
+            <div class="description-text">
+                {{ order.description|default:"Описание отсутствует." }}
+            </div>
+        </div>
+
+        <div class="detail-actions-row">
+
+            <a href="{% url 'main:catalog' %}" class="btn-detail-back">Назад в каталог</a>
+
+            {% if is_author %}
+            <a href="{% url 'orders:order_edit' order.id %}" class="btn-detail-edit">Редактировать</a>
+            <a href="{% url 'orders:order_delete' order.id %}" class="btn-detail-delete">Удалить</a>
+
+            {% elif is_driver %}
+            <a href="#" class="btn-detail-accept">Принять заказ</a>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

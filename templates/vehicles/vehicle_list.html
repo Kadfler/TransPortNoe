@@ -1,0 +1,169 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Каталог транспорта | ТК{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'orders/css/catalog_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="catalog-wrapper">
+    <section class="catalog-section">
+        <div class="catalog-container">
+
+            <div class="catalog-header-flex">
+                <div>
+                    <h1>Каталог транспорта</h1>
+                    <p class="catalog-header-sub">Доступные автомобили и перевозчики в системе</p>
+                </div>
+
+                {% if request.user.is_authenticated and request.user.role != 'client' %}
+                <a href="{% url 'vehicles:vehicle_create' %}" class="btn-add-order-top">
+                    + Добавить transport
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="filter-panel">
+                <form method="GET" action="{% url 'vehicles:vehicle_list' %}" class="filter-form">
+
+                    <div class="filter-group wide">
+                        <label class="filter-label">Поиск автомобиля:</label>
+                        <input type="text" name="search_vehicle" value="{{ filters.search_vehicle }}" placeholder="Марка машины или госномер" class="filter-input">
+                    </div>
+
+                    <div class="filter-group status-width">
+                        <label class="filter-label">Статус:</label>
+                        <select name="status" class="filter-select">
+                            <option value="">Все машины</option>
+                            <option value="free" {% if filters.status == 'free' %}selected{% endif %}>✓ Свободен</option>
+                            <option value="busy" {% if filters.status == 'busy' %}selected{% endif %}>● В рейсе</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group weight-width">
+                        <label class="filter-label">Грузоподъемность:</label>
+                        <select name="capacity_range" class="filter-select">
+                            <option value="">Любой тоннаж</option>
+                            <option value="light" {% if filters.capacity_range == 'light' %}selected{% endif %}>До 3.5 тонн</option>
+                            <option value="medium" {% if filters.capacity_range == 'medium' %}selected{% endif %}>3.5 — 10 тонн</option>
+                            <option value="heavy" {% if filters.capacity_range == 'heavy' %}selected{% endif %}>Более 10 тонн (Фуры)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn-filter-submit">Применить</button>
+                        {% if filters.search_vehicle or filters.status or filters.capacity_range %}
+                        <a href="{% url 'vehicles:vehicle_list' %}" class="btn-filter-reset">Сбросить</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+
+            <div class="orders-grid">
+                {% for vehicle in vehicles %}
+                <div class="order-card">
+                    <div class="order-route">
+                        <span class="route-label">Автомобиль</span>
+                        <div class="route-address">
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #1e293b;">{{ vehicle.mark }}</div>
+                            <div style="background: #edf2f7; display: inline-block; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; margin-top: 6px; border: 1px solid #cbd5e0; color: #0f172a;">
+                                {{ vehicle.plate_number }}
+                            </div>
+                        </div>
+
+                        <div class="route-meta" style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                            <span class="route-distance">
+                                {{ vehicle.get_body_type_display }}
+                            </span>
+
+                            {% if vehicle.id in busy_vehicle_ids %}
+                                <span class="status-badge" style="padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background-color: #ffe4e6; color: #e11d48; border: 1px solid #fda4af; white-space: nowrap;">
+                                    ● В рейсе
+                                </span>
+                            {% else %}
+                                <span class="status-badge" style="padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background-color: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; white-space: nowrap;">
+                                    ✓ Свободен
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="order-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Водитель</span>
+                            <span class="spec-value">{{ vehicle.driver.full_name|default:vehicle.driver.username }}</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Грузоподъемность</span>
+                            <span class="spec-value">{{ vehicle.capacity }} т</span>
+                        </div>
+                    </div>
+
+                    <div class="order-footer" style="display: flex; flex-direction: column; gap: 12px; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="order-price-block">
+                                <span class="price-label">Ставка за км</span>
+                                <span class="price-value">{{ vehicle.base_rate_per_km }} ₽</span>
+                            </div>
+
+                            <div style="text-align: right;">
+                                <span class="price-label" style="display: block; font-size: 0.75rem; color: #a0aec0; text-transform: uppercase;">Пробег</span>
+                                <span style="font-weight: 600; color: #4a5568;">{{ vehicle.mileage }} км</span>
+                            </div>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid #edf2f7; margin: 4px 0;">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.85rem; color: #718096; font-weight: 500;">Связаться:</span>
+                            <a href="tel:{{ vehicle.driver.phone }}" style="color: #0066ff; font-weight: 700; text-decoration: none; font-size: 0.95rem;">
+                                {{ vehicle.driver.phone }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div style="grid-column: 1 / -1; width: 100%; display: flex; justify-content: center; padding: 60px 0;">
+                    <div class="empty-catalog-card">
+                        <h3 style="color: #2d3748; margin-top: 0; margin-bottom: 12px; font-size: 1.3rem; font-weight: 700;">Транспорт не найден</h3>
+                        <p style="color: #718096; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0;">Попробуйте изменить параметры фильтрации или сбросить поиск транспорта.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- БЛОК ПАГИНАЦИИ ДЛЯ КАТАЛОГА ТРАНСПОРТА -->
+            {% if vehicles.has_other_pages %}
+            <div class="pagination-container">
+
+                {% if vehicles.has_previous %}
+                    <a href="?page={{ vehicles.previous_page_number }}&search_vehicle={{ filters.search_vehicle }}&status={{ filters.status }}&capacity_range={{ filters.capacity_range }}" class="pagination-link">
+                        &larr; Назад
+                    </a>
+                {% endif %}
+
+                {% for num in vehicles.paginator.page_range %}
+                    {% if vehicles.number == num %}
+                        <span class="pagination-link active">{{ num }}</span>
+                    {% elif num > vehicles.number|add:'-3' and num < vehicles.number|add:'3' %}
+                        <a href="?page={{ num }}&search_vehicle={{ filters.search_vehicle }}&status={{ filters.status }}&capacity_range={{ filters.capacity_range }}" class="pagination-link">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if vehicles.has_next %}
+                    <a href="?page={{ vehicles.next_page_number }}&search_vehicle={{ filters.search_vehicle }}&status={{ filters.status }}&capacity_range={{ filters.capacity_range }}" class="pagination-link">
+                        Вперед &rarr;
+                    </a>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+</div>
+{% endblock %}

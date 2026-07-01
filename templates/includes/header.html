@@ -1,0 +1,30 @@
+<header class="navbar {% if header_theme == 'dark' or active_tab == 'logistics' or 'catalog' in request.path or 'vehicles' in request.path or 'orders' in request.path or 'users-manage' in request.path or 'profile' in request.path or 'users' in request.path or 'price' in request.path %}navbar-dark{% else %}navbar-transparent{% endif %}">
+    <a href="{% url 'home:index' %}" class="logo" style="text-decoration: none; color: inherit;">TRANSPORT COMPANY</a>
+
+    <ul class="nav-links">
+        <li><a href="{% url 'main:catalog' %}">Каталог заказов</a></li>
+        <li><a href="{% url 'home:price' %}">Стоимость</a></li>
+        <li><a href="{% url 'vehicles:vehicle_list' %}">Транспорт</a></li>
+
+        {# ПРОВЕРКА ДЛЯ АДМИНИСТРАТОРА И ЛОГИСТА #}
+        {% if request.user.is_authenticated and request.user.role in 'admin,dispatcher' %}
+            <li>
+                <a href="{% url 'users:logistics' %}" style="color: #ffcc00; font-weight: bold; margin-right: 10px;">
+                    Логистика
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'users:manage_roles' %}" style="color: #ffcc00; font-weight: bold;">
+                    Управление ролями
+                </a>
+            </li>
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'users:profile' %}" class="nav-username">Личный кабинет ({{ request.user.username }})</a></li>
+            <li><a href="{% url 'home:logout' %}" class="btn-logout" style="color: #ff5533;">Выйти</a></li>
+        {% else %}
+            <li><a href="{% url 'users:login' %}">Вход / Регистрация</a></li>
+        {% endif %}
+    </ul>
+</header>

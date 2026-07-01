@@ -1,0 +1,37 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Регистрация | Транспортная Компания{% endblock %}
+
+{% block content %}
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2 class="auth-title">Регистрация профиля</h2>
+        <p class="auth-subtitle">Создайте аккаунт в транспортной экосистеме</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="non-field-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-submit">Создать аккаунт</button>
+        </form>
+
+        <div class="auth-switch">
+            Уже зарегистрированы? <a href="{% url 'users:login' %}">Войти</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
