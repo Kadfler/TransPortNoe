@@ -10,3 +10,8 @@ urlpatterns = [
     path('routes/', include('routes.urls', namespace='routes')),
     path('orders/', include('orders.urls', namespace='orders')),
 ]
+
+handler404 = 'django.views.defaults.page_not_found'
+handler500 = 'django.views.defaults.server_error'
+handler403 = 'django.views.defaults.permission_denied'
+handler400 = 'django.views.defaults.bad_request'
